@@ -20305,7 +20305,8 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(OneWB).call(this, props));
 
 	    _this.state = {
-	      isComment: false
+	      isComment: false,
+	      commentContent: ''
 	    };
 	    return _this;
 	  }
@@ -20318,7 +20319,7 @@
 	      var contentImgs;
 	      if (this.state.isComment) {
 	        //控制评论框是否展现,因为是动态的，所以放在state而不是props
-	        commentForm = _react2.default.createElement(_commentForm2.default, { 'data-my-head-img': oneData.headUrl });
+	        commentForm = _react2.default.createElement(_commentForm2.default, { 'data-my-head-img': oneData.headUrl, commentChange: this.handleCommentChange.bind(this), commitContent: this.handleCommitContent.bind(this), isCommentOpen: this.isComment });
 	      }
 
 	      if (oneData.contentImgUrls) {
@@ -20415,14 +20416,36 @@
 	        commentForm
 	      );
 	    }
+	    //操作栏点击事件处理
+
 	  }, {
 	    key: 'handlerForwardClick',
 	    value: function handlerForwardClick(event) {
 	      if (event.target.innerText.indexOf('评论') != -1) {
-	        this.setState({ isComment: true });
+	        if (this.state.isComment) {
+	          this.setState({ isComment: false });
+	        } else {
+	          this.setState({ isComment: true });
+	        }
 	      } else {
 	        this.setState({ isComment: false });
 	      }
+	    }
+	    //评论框内容变化
+
+	  }, {
+	    key: 'handleCommentChange',
+	    value: function handleCommentChange(event) {
+	      this.setState({ commentContent: event.target.value });
+	    }
+	    //提交内容评论
+
+	  }, {
+	    key: 'handleCommitContent',
+	    value: function handleCommitContent() {
+	      console.log("commit!!");
+	      console.log(this.state.commentContent);
+	      this.setState({ isComment: false });
 	    }
 	  }]);
 
@@ -20436,6 +20459,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -20454,38 +20481,47 @@
 	var CommentForm = function (_React$Component) {
 	  _inherits(CommentForm, _React$Component);
 
-	  function CommentForm() {
+	  function CommentForm(props) {
 	    _classCallCheck(this, CommentForm);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(CommentForm).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CommentForm).call(this, props));
+
+	    _this.state = {};
+	    return _this;
 	  }
 
 	  _createClass(CommentForm, [{
 	    key: 'render',
 	    value: function render() {
 	      var imgUrl = this.props['data-my-head-img'];
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'row comment-form clearfix' },
-	        _react2.default.createElement(
+	      if (this.props.isCommentOpen) {
+	        return _react2.default.createElement('div', null);
+	      } else {
+	        return _react2.default.createElement(
 	          'div',
-	          { className: 'ow-left' },
-	          _react2.default.createElement('img', { src: imgUrl, alt: '头像', className: 'little-head' })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'ow-right' },
-	          _react2.default.createElement('textarea', { name: 'name', rows: '8', cols: '40', className: 'comment-box' }),
-	          _react2.default.createElement('input', { className: 'comment-btn', type: 'submit', value: '评论' })
-	        )
-	      );
+	          { className: 'row comment-form clearfix' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'ow-left' },
+	            _react2.default.createElement('img', { src: imgUrl, alt: '头像', className: 'little-head' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'ow-right' },
+	            _react2.default.createElement('textarea', { name: 'commentContent', rows: '8', cols: '40', className: 'comment-box', onChange: this.props.commentChange }),
+	            _react2.default.createElement('input', { className: 'comment-btn', type: 'submit', value: '评论', onClick: this.props.commitContent })
+	          )
+	        );
+	      }
 	    }
 	  }]);
 
 	  return CommentForm;
 	}(_react2.default.Component);
+	// module.exports = CommentForm;
 
-	module.exports = CommentForm;
+
+	exports.default = CommentForm;
 
 /***/ },
 /* 171 */

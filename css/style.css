@@ -5,6 +5,8 @@ body{
 	background: #d4d4d4;
 	margin: 0;
 	padding: 0;
+	// background: url(bc.jpg) center center no-repeat;
+	// background-size: auto;
 }
 .clearfix:after {
     display: table;
